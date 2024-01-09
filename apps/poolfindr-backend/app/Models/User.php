@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasAvatar;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -65,5 +66,17 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
                 ]);
             }
         );
+    }
+
+    /**
+     * Send a password reset notification to the user.
+     *
+     * @param  string  $token
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $url = config('app.url') . '/reset-password?token=' . $token;
+
+        $this->notify(new ResetPasswordNotification($url, config('auth.passwords.users.expire')));
     }
 }
