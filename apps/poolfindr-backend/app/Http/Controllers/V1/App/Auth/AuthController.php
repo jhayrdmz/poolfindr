@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\V1\Auth;
+namespace App\Http\Controllers\V1\App\Auth;
 
 use App\Enums\ErrorCodes;
 use App\Models\User;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\App\Auth\LoginRequest;
+use App\Http\Resources\App\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -49,7 +49,7 @@ class AuthController extends Controller
                 'access_token' => $token->plainTextToken,
                 'expires_at' => $token->accessToken->expires_at,
                 'token_type' => 'bearer',
-                'user' => new UserResource($user->load('accessLevel', 'avatar'))
+                'user' => new UserResource($user)
             ]], 200)->header('Authorization', $token->plainTextToken);
         }
 
@@ -78,7 +78,7 @@ class AuthController extends Controller
         /** @var \App\Models\User */
         $user = auth()->user();
 
-        return new UserResource($user->load('accessLevel', 'avatar'));
+        return new UserResource($user);
     }
 
     /**

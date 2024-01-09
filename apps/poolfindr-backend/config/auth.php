@@ -45,6 +45,16 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'host' => [
+            'driver' => 'sanctum',
+            'provider' => 'hosts',
+            'hash' => false,
+        ],
+        'admin' => [
+            'driver' => 'sanctum',
+            'provider' => 'admins',
+            'hash' => false,
+        ]
     ],
 
     /*
@@ -69,11 +79,14 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'hosts' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Host::class,
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ]
     ],
 
     /*
@@ -98,6 +111,18 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'hosts' => [
+            'provider' => 'hosts',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

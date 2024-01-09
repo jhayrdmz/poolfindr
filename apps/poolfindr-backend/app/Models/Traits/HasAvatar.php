@@ -17,7 +17,7 @@ trait HasAvatar
     public function avatar()
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('collection_name', MediaCollectionType::USER_AVATAR);
+            ->where('collection_name', MediaCollectionType::AVATAR);
     }
 
     /**
@@ -27,7 +27,7 @@ trait HasAvatar
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(MediaCollectionType::USER_AVATAR)
+        $this->addMediaCollection(MediaCollectionType::AVATAR)
             ->singleFile()
             ->registerMediaConversions(function () {
                 $this->addMediaConversion('thumb')->width(254);
@@ -63,6 +63,6 @@ trait HasAvatar
         return $this->addMedia($file)
             ->usingName($name)
             ->usingFileName($fileName)
-            ->toMediaCollection(MediaCollectionType::USER_AVATAR);
+            ->toMediaCollection(MediaCollectionType::AVATAR);
     }
 }
