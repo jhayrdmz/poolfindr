@@ -26,6 +26,7 @@ class Host extends Authenticatable implements MustVerifyEmail, HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
+        'username',
         'first_name',
         'last_name',
         'email',
