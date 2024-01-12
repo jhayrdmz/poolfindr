@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasAvatar;
+use App\Models\Traits\UserNotificationsTrait;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -20,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     use Notifiable;
     use HasAvatar;
     use HasUuids;
+    use UserNotificationsTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -66,17 +68,5 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
                 ]);
             }
         );
-    }
-
-    /**
-     * Send a password reset notification to the user.
-     *
-     * @param  string  $token
-     */
-    public function sendPasswordResetNotification($token): void
-    {
-        $url = config('app.url') . '/reset-password?token=' . $token;
-
-        $this->notify(new ResetPasswordNotification($url, config('auth.passwords.users.expire')));
     }
 }

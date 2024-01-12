@@ -9,6 +9,7 @@ Route::group(['prefix' => 'v1', 'as' => 'app.'], function () {
         Route::post('register', 'RegisterController')->name('register');
         Route::post('forgot-password', 'ForgotPasswordController@forgotPassword')->name('forgot-password');
         Route::post('verify-token', 'PasswordResetController@verifyToken')->name('verify-token');
+        Route::post('reset-password', 'PasswordResetController@passwordReset')->name('reset-password');
     });
 
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {

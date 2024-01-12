@@ -17,6 +17,14 @@ class ForgotPasswordController extends Controller
             $request->only('email')
         );
 
+        if ($status === Password::RESET_THROTTLED) {
+            return $this->respondWithError(
+                'RESET_THROTTLED',
+                422,
+                'Max request reached, please try again later.'
+            );
+        }
+
         return $status === Password::RESET_LINK_SENT
             ? $this->respondWithMessage('Successfully sent reset link.')
             : $this->respondWithError('UNKNOWN_ERROR', 422, 'Something went wrong.');
