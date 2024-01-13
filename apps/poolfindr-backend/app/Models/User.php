@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Traits\HasAvatar;
 use App\Models\Traits\UserNotificationsTrait;
-use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
