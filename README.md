@@ -52,4 +52,11 @@
    docker ps
    ```
 
-7. URLs - Backend: `http://localhost:8000` , Frontend: `http://localhost:3000`
+7. Migrate database
+
+   ```shell
+   docker exec -it poolfindr-backend /bin/bash
+   php artisan migrate:fresh
+   ```
+
+8. URLs - Backend: `http://localhost:8000` , Frontend: `http://localhost:3000`
