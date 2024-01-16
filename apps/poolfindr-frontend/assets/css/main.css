@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-size: 16px;
+  font-family: "Inter", sans-serif;
+  overflow-y: scroll;
+}
+
+body {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* button styles */
+.btn-common {
+  @apply bg-white border-gray-200
+}
+
+.btn-primary {
+  @apply bg-primary border-primary text-white
+}
