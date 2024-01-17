@@ -17,7 +17,7 @@ class ForgotPasswordRequest extends FormRequest
             'email' => [
                 'bail',
                 'required',
-                'exists:merchants,email'
+                'exists:users,email'
             ],
         ];
     }
