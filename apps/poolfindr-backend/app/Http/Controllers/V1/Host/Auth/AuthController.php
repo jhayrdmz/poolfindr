@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\V1\Host\Auth;
 
 use App\Enums\ErrorCodes;
-use App\Models\User;
+use App\Models\Host;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\App\Auth\LoginRequest;
-use App\Http\Resources\App\UserResource;
+use App\Http\Requests\Host\Auth\LoginRequest;
+use App\Http\Resources\Host\HostResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['login']]);
+        // $this->middleware('auth:host', ['except' => ['login']]);
         $this->middleware('throttle:60,1', ['except' => ['me']]);
     }
 
@@ -34,26 +34,26 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::where('email', $request->input('email'))->first();
+        $host = Host::where('email', $request->input('email'))->first();
 
-        if (!$user) {
+        if (!$host) {
             return $this->respondWithError(ErrorCodes::AUTH_USER_NOT_FOUND, 401);
         }
 
-        if (Hash::check($request->input('password'), $user->password)) {
-            RateLimiter::clear('login-attempt:' . $user->id);
+        if (Hash::check($request->input('password'), $host->password)) {
+            RateLimiter::clear('login-attempt:' . $host->id);
 
-            $token = $user->createToken($request->header('user-agent'), ['*']);
+            $token = $host->createToken($request->header('user-agent'), ['*']);
 
             return response()->json(['data' => [
                 'access_token' => $token->plainTextToken,
                 'expires_at' => $token->accessToken->expires_at,
                 'token_type' => 'bearer',
-                'user' => new UserResource($user)
+                'user' => new HostResource($host)
             ]], 200)->header('Authorization', $token->plainTextToken);
         }
 
-        $executed = RateLimiter::attempt('login-attempt:' . $user->id, 10, function () {
+        $executed = RateLimiter::attempt('login-attempt:' . $host->id, 10, function () {
             return;
         }, 3600);
 
@@ -64,21 +64,21 @@ class AuthController extends Controller
         }
 
         return $this->respondWithError(ErrorCodes::AUTH_INVALID_CREDENTIALS, 401, null, [
-            'attempts' => RateLimiter::attempts('login-attempt:' . $user->id)
+            'attempts' => RateLimiter::attempts('login-attempt:' . $host->id)
         ]);
     }
 
     /**
      * Get the authenticated user details
      * 
-     * @return \App\Http\Resources\UserResource
+     * @return \App\Http\Resources\Host\HostResource
      */
-    public function me(): UserResource
+    public function me(): HostResource
     {
-        /** @var \App\Models\User */
-        $user = auth()->user();
+        /** @var \App\Models\Host */
+        $host = auth('host')->user();
 
-        return new UserResource($user);
+        return new HostResource($host);
     }
 
     /**
@@ -90,7 +90,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user('host')->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logout successfully.']);
     }
